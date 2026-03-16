@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Sondage : Votre chien a-t-il le parvovirus ?</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=1920&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 60px auto;
+    background: rgba(255,255,255,0.95);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.4);
+}
+
+h1, h2 {
+    text-align: center;
+    color: #2c3e50;
+}
+
+button {
+    padding: 12px 25px;
+    margin-top: 20px;
+    cursor: pointer;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button:hover {
+    background-color: #2ecc71;
+}
+
+.question {
+    margin-bottom: 15px;
+}
+
+.result {
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 18px;
+    text-align: center;
+}
+
+.progress-bar {
+    height: 25px;
+    border-radius: 12px;
+    background-color: #ddd;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0;
+    background-color: green;
+    text-align: center;
+    line-height: 25px;
+    color: white;
+    font-weight: bold;
+    transition: width 0.5s;
+    border-radius: 12px;
+}
+
+.warning {
+    color: red;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.hidden {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="home">
+<h1>Le Parvovirus Canin</h1>
+
+<p>
+Le parvovirus canin est une maladie virale très contagieuse qui touche principalement les chiots.
+Il provoque des vomissements, diarrhées sévères (parfois sanglantes), déshydratation et grande fatigue.
+</p>
+
+<p>
+Cette maladie peut être grave et nécessite une prise en charge vétérinaire rapide.
+La vaccination reste la meilleure protection.
+</p>
+
+<h2>Testez votre chien</h2>
+<p style="text-align:center;">
+Cliquez sur le bouton ci-dessous pour accéder au sondage et estimer le risque.
+</p>
+
+<button onclick="showQuiz()">Accéder au sondage</button>
+</div>
+
+
+<div class="container hidden" id="quiz">
+
+<h1>Sondage : Votre chien a-t-il le parvovirus ?</h1>
+
+<form id="quizForm">
+
+<div class="question">1. Vomissements fréquents ?<br>
+<input type="radio" name="q1" value="1"> Oui
+<input type="radio" name="q1" value="0"> Non</div>
+
+<div class="question">2. Diarrhée sévère ?<br>
+<input type="radio" name="q2" value="1"> Oui
+<input type="radio" name="q2" value="0"> Non</div>
+
+<div class="question">3. Diarrhée avec du sang ?<br>
+<input type="radio" name="q3" value="1"> Oui
+<input type="radio" name="q3" value="0"> Non</div>
+
+<div class="question">4. Grande fatigue ?<br>
+<input type="radio" name="q4" value="1"> Oui
+<input type="radio" name="q4" value="0"> Non</div>
+
+<div class="question">5. Refus de manger ?<br>
+<input type="radio" name="q5" value="1"> Oui
+<input type="radio" name="q5" value="0"> Non</div>
+
+<div class="question">6. Fièvre ?<br>
+<input type="radio" name="q6" value="1"> Oui
+<input type="radio" name="q6" value="0"> Non</div>
+
+<div class="question">7. Perte de poids récente ?<br>
+<input type="radio" name="q7" value="1"> Oui
+<input type="radio" name="q7" value="0"> Non</div>
+
+<div class="question">8. Déshydratation ?<br>
+<input type="radio" name="q8" value="1"> Oui
+<input type="radio" name="q8" value="0"> Non</div>
+
+<div class="question">9. Moins d’un an ?<br>
+<input type="radio" name="q9" value="1"> Oui
+<input type="radio" name="q9" value="0"> Non</div>
+
+<div class="question">10. Non vacciné ?<br>
+<input type="radio" name="q10" value="1"> Oui
+<input type="radio" name="q10" value="0"> Non</div>
+
+<button type="button" onclick="calculateResult()">Voir le résultat</button>
+<button type="button" onclick="goHome()">Retour à l'accueil</button>
+
+</form>
+
+<div class="result" id="result"></div>
+<div class="progress-bar"><div class="progress-fill" id="progress-fill">0%</div></div>
+
+<div class="warning">
+⚠️ Ce test est indicatif et ne remplace pas un diagnostic vétérinaire.
+</div>
+
+</div>
+
+<script>
+
+function showQuiz(){
+    document.getElementById("home").classList.add("hidden");
+    document.getElementById("quiz").classList.remove("hidden");
+}
+
+function goHome(){
+    document.getElementById("quiz").classList.add("hidden");
+    document.getElementById("home").classList.remove("hidden");
+}
+
+function calculateResult() {
+    let total = 0;
+    let questions = 10;
+
+    for (let i = 1; i <= questions; i++) {
+        let radios = document.getElementsByName("q" + i);
+        let answered = false;
+
+        for (let radio of radios) {
+            if (radio.checked) {
+                total += parseInt(radio.value);
+                answered = true;
+            }
+        }
+
+        if(!answered){
+            alert("Veuillez répondre à toutes les questions.");
+            return;
+        }
+    }
+
+    let percentage = Math.round((total / questions) * 100);
+    document.getElementById("result").innerHTML =
+        percentage + "% de probabilité que votre chien soit atteint du parvovirus.";
+
+    let fill = document.getElementById("progress-fill");
+    fill.style.width = percentage + "%";
+
+    if(percentage < 40) fill.style.backgroundColor = "green";
+    else if(percentage < 70) fill.style.backgroundColor = "orange";
+    else fill.style.backgroundColor = "red";
+
+    fill.innerText = percentage + "%";
+}
+
+</script>
+
+</body>
+</html>
